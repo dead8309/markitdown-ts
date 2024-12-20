@@ -33,6 +33,13 @@ const YOUTUBE_TEST_STRINGS = [
   "the model we&amp;#39;re going to be using today is GPT 3.5 turbo"
 ];
 
+const IPYNB_TEST_STRINGS = [
+  "Test Notebook",
+  "## Code Cell Below",
+  "print(42)",
+  "print('markitdown')"
+];
+
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
   it("should convert plain text", async () => {
@@ -117,6 +124,8 @@ describe("MarkItDown Tests", () => {
     expect(result).not.toBeUndefined();
 
     const textContent = result?.text_content.replace("\\", "");
-    console.log(textContent);
+    for (const testString of IPYNB_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
   });
 });
