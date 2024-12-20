@@ -1,3 +1,1 @@
-export function hello() {
-  return "Hello World";
-}
+export { MarkItDown } from "./markitdown";

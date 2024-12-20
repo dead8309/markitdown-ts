@@ -1,0 +1,93 @@
+import { MarkItDown } from "@/markitdown";
+import { describe, it, expect } from "vitest";
+
+const PLAIN_TEST = ["hello world", "hi there", "bye bye"];
+
+const BLOG_TEST_URL =
+  "https://microsoft.github.io/autogen/blog/2023/04/21/LLM-tuning-math";
+const BLOG_TEST_STRINGS = [
+  "Large language models (LLMs) are powerful tools that can generate natural language texts for various applications, such as chatbots, summarization, translation, and more. GPT-4 is currently the state of the art LLM in the world. Is model selection irrelevant? What about inference parameters?",
+  "an example where high cost can easily prevent a generic complex",
+];
+
+const RSS_TEST_STRINGS = [
+  "The Official Microsoft Blog",
+  "In the case of AI, it is absolutely true that the industry is moving incredibly fast",
+];
+
+const WIKIPEDIA_TEST_URL = "https://en.wikipedia.org/wiki/Microsoft";
+const WIKIPEDIA_TEST_STRINGS = [
+  "Microsoft entered the operating system (OS) business in 1980 with its own version of [Unix]",
+  'Microsoft was founded by [Bill Gates](/wiki/Bill_Gates "Bill Gates")',
+];
+const WIKIPEDIA_TEST_EXCLUDES = [
+  "You are encouraged to create an account and log in",
+  "154 languages",
+  "move to sidebar",
+];
+
+//NOTE: Dont forget to add new converters to the markitdown class converters array
+describe("MarkItDown Tests", () => {
+  it("should convert plain text", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test.txt`);
+
+    expect(result).toBeTruthy();
+
+    const textContent = result?.text_content.replace("\\", "");
+    expect(result?.title).toBeNull();
+
+    for (const testStr of PLAIN_TEST) {
+      expect(textContent).toContain(testStr);
+    }
+  });
+
+  it("should convert HTML to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(
+      `${__dirname}/__files/test_blog.html`,
+      { url: BLOG_TEST_URL }
+    );
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of BLOG_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert RSS to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(
+      `${__dirname}/__files/test_rss.xml`
+    );
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of RSS_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert Wikipedia to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(
+      `${__dirname}/__files/test_wikipedia.html`,
+      { url: WIKIPEDIA_TEST_URL }
+    );
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of WIKIPEDIA_TEST_EXCLUDES) {
+      expect(textContent).not.toContain(testString);
+    }
+    for (const testString of WIKIPEDIA_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+});
