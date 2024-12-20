@@ -108,4 +108,15 @@ describe("MarkItDown Tests", () => {
       expect(textContent).toContain(testString);
     }
   });
+
+  it("should convert .ipynb to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test_notebook.ipynb`);
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    console.log(textContent);
+  });
 });
