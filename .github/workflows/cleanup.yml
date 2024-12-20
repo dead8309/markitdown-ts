@@ -1,0 +1,77 @@
+name: Cleanup Template
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # Run a cleaning process only if the workflow is triggered by the non-"starter-ts" repository.
+  cleanup-template:
+    name: Cleanup Template
+
+    runs-on: ubuntu-latest
+
+    if: github.repository != 'yjl9903/starter-ts'
+
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Get GitHub username
+        uses: actions/github-script@v7
+        id: gh
+        with:
+          result-encoding: string
+          script: |
+            const { GITHUB_ACTOR } = process.env
+            const user = await github.rest.users.getByUsername({
+              username: GITHUB_ACTOR
+            })
+            return user.data.name
+
+      - name: Update repo info
+        run: |
+          YEAR="$(date +'%Y')"
+          REPO="${GITHUB_REPOSITORY##*/}"
+          ACTOR=$(echo $GITHUB_ACTOR | tr '[:upper:]' '[:lower:]')
+          USERNAME="${{ steps.gh.outputs.result }}"
+          SAFE_REPO=$(echo $REPO | sed 's/[^a-zA-Z0-9\-_.]//g' | tr '[:upper:]' '[:lower:]')
+          SAFE_ACTOR=$(echo $ACTOR | sed 's/[^a-zA-Z0-9]//g' | tr '[:upper:]' '[:lower:]')
+
+          find . -name "package.json" -not -path "./node_modules/*" -exec sed -i "s/\[repo\]/$REPO/g" {} +
+          find . -name "package.json" -not -path "./node_modules/*" -exec sed -i "s/\[actor\]/$ACTOR/g" {} +
+          find . -name "package.json" -not -path "./node_modules/*" -exec sed -i "s/\[username\]/$USERNAME/g" {} +
+
+          sed -i "s/\[year\]/$YEAR/g" ./.github/template/*
+          sed -i "s/\[repo\]/$REPO/g" ./.github/template/*
+          sed -i "s/\[actor\]/$ACTOR/g" ./.github/template/*
+          sed -i "s/\[username\]/$USERNAME/g" ./.github/template/*
+
+          cp .github/template/LICENSE LICENSE
+          cp .github/template/README.md README.md
+
+          rm .github/workflows/cleanup.yml
+          rm -rf .github/template
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.0.0
+
+      - name: Setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install
+
+      - name: Commit and push
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          git add .
+          git commit -m "chore: cleanup template"
+          git push

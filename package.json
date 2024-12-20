@@ -1,0 +1,48 @@
+{
+  "name": "[repo]",
+  "version": "0.0.0",
+  "description": "",
+  "keywords": [],
+  "homepage": "https://github.com/[actor]/[repo]#readme",
+  "bugs": {
+    "url": "https://github.com/[actor]/[repo]/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/[actor]/[repo].git"
+  },
+  "license": "MIT",
+  "author": "[username]",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "require": "./dist/index.cjs",
+      "import": "./dist/index.mjs",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "main": "dist/index.cjs",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "unbuild",
+    "format": "prettier --write src/**/*.ts",
+    "release": "bumpp --commit --push --tag && pnpm publish",
+    "preversion": "pnpm typecheck && pnpm build",
+    "test": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "bumpp": "^9.9.1",
+    "prettier": "^3.4.2",
+    "typescript": "^5.7.2",
+    "unbuild": "^3.0.1",
+    "vite": "^6.0.4",
+    "vitest": "^2.1.8"
+  },
+  "packageManager": "pnpm@9.15.1"
+}
