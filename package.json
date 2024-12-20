@@ -1,18 +1,18 @@
 {
-  "name": "[repo]",
+  "name": "markitdown",
   "version": "0.0.0",
   "description": "",
   "keywords": [],
-  "homepage": "https://github.com/[actor]/[repo]#readme",
+  "homepage": "https://github.com/dead8309/markitdown#readme",
   "bugs": {
-    "url": "https://github.com/[actor]/[repo]/issues"
+    "url": "https://github.com/dead8309/markitdown/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/[actor]/[repo].git"
+    "url": "git+https://github.com/dead8309/markitdown.git"
   },
   "license": "MIT",
-  "author": "[username]",
+  "author": "Vaibhav Raj",
   "sideEffects": false,
   "exports": {
     ".": {
