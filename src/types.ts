@@ -15,6 +15,8 @@ export type ConverterOptions = {
   file_extension?: string;
   url?: string;
   fetch?: typeof fetch;
+  enableYoutubeTranscript?: boolean;
+  youtubeTranscriptLanguage?: string;
 };
 
 export interface DocumentConverter {

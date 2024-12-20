@@ -6,7 +6,7 @@ import { PlainTextConverter } from "./converters/plain-text";
 import { HtmlConverter } from "./converters/html";
 import { RSSConverter } from "./converters/xml-rss-atom";
 import { WikipediaConverter } from "./converters/wikipedia";
-import { Readable } from "stream";
+import { YouTubeConverter } from "./converters/youtube";
 
 export class MarkItDown {
   private readonly llm_client: any;
@@ -24,6 +24,7 @@ export class MarkItDown {
     this.register_converter(new HtmlConverter());
     this.register_converter(new RSSConverter());
     this.register_converter(new WikipediaConverter());
+    this.register_converter(new YouTubeConverter());
   }
 
   async convert(
@@ -48,7 +49,7 @@ export class MarkItDown {
     source: string,
     { fetch = globalThis.fetch, ...options }: ConverterOptions
   ): Promise<ConverterResult> {
-    let response = await fetch(source, { redirect: "manual" });
+    let response = await fetch(source);
     if (!response.ok) {
       throw new Error(`Failed to fetch URL: ${source}, status: ${response.status}`);
     }
@@ -69,7 +70,9 @@ export class MarkItDown {
 
     const mimeExtension = mime.extension(contentType);
     if (mimeExtension) {
-      extensions.add(mimeExtension);
+      //NOTE: . was missing from the starting of the string which lead to youtube
+      // test to fail as it was not able to find the correct extension i.e .html
+      extensions.add(`.${mimeExtension}`);
     }
 
     const content_disposition = response.headers?.get("content-disposition") || "";
