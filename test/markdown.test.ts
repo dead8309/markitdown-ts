@@ -104,7 +104,6 @@ describe("MarkItDown Tests", () => {
     expect(result).not.toBeUndefined();
 
     const textContent = result?.text_content.replace("\\", "");
-    console.log(textContent);
     for (const testString of YOUTUBE_TEST_STRINGS) {
       expect(textContent).toContain(testString);
     }
