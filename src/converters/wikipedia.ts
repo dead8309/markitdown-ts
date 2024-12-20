@@ -4,10 +4,7 @@ import { CustomTurnDown } from "../custom-turndown";
 import { ConverterOptions, ConverterResult, DocumentConverter } from "../types";
 
 export class WikipediaConverter implements DocumentConverter {
-  async convert(
-    localPath: string,
-    options: ConverterOptions = {}
-  ): Promise<ConverterResult> {
+  async convert(localPath: string, options: ConverterOptions = {}): Promise<ConverterResult> {
     const fileExtension = options.file_extension || "";
     if (![".html", ".htm"].includes(fileExtension.toLowerCase())) {
       return null;
@@ -45,15 +42,14 @@ export class WikipediaConverter implements DocumentConverter {
         mainTitle = titleElm.textContent;
       }
       webpageText =
-        `# ${mainTitle}\n\n` +
-        new CustomTurnDown().convert_soup(bodyElm as HTMLElement);
+        `# ${mainTitle}\n\n` + new CustomTurnDown().convert_soup(bodyElm as HTMLElement);
     } else {
       webpageText = new CustomTurnDown().convert_soup(doc);
     }
 
     return {
       title: mainTitle,
-      text_content: webpageText,
+      text_content: webpageText
     };
   }
 }

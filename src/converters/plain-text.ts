@@ -4,10 +4,7 @@ import * as mime from "mime-types";
 import fs from "fs";
 
 export class PlainTextConverter implements DocumentConverter {
-  async convert(
-    local_path: string,
-    options: ConverterOptions = {}
-  ): Promise<ConverterResult> {
+  async convert(local_path: string, options: ConverterOptions = {}): Promise<ConverterResult> {
     const fileExtension = options.file_extension || "";
     const contentType = mime.lookup(fileExtension);
 
@@ -21,7 +18,7 @@ export class PlainTextConverter implements DocumentConverter {
 
     return {
       title: null,
-      text_content: content,
+      text_content: content
     };
   }
 }
