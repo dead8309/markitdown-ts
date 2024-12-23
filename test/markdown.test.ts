@@ -40,6 +40,17 @@ const IPYNB_TEST_STRINGS = [
   "print('markitdown')"
 ];
 
+const SERP_TEST_URL = "https://www.bing.com/search?q=microsoft+wikipedia";
+const SERP_TEST_STRINGS = [
+  "](https://en.wikipedia.org/wiki/Microsoft",
+  "Microsoft Corporation is **an American multinational corporation and technology company headquartered** in Redmond",
+  "*   1995–2007: Foray into the Web, Windows 95, Windows XP, and Xbox"
+];
+const SERP_TEST_EXCLUDES = [
+  "https://www.bing.com/ck/a?!&&p=",
+  "data:image/svg+xml,%3Csvg%20width%3D"
+];
+
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
   it("should convert plain text", async () => {
@@ -125,6 +136,25 @@ describe("MarkItDown Tests", () => {
 
     const textContent = result?.text_content.replace("\\", "");
     for (const testString of IPYNB_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert Bing SERP to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test_serp.html`, {
+      url: SERP_TEST_URL
+    });
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of SERP_TEST_EXCLUDES) {
+      expect(textContent).not.toContain(testString);
+    }
+
+    for (const testString of SERP_TEST_STRINGS) {
       expect(textContent).toContain(testString);
     }
   });

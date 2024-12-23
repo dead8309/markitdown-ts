@@ -22,7 +22,8 @@ export class CustomTurnDown {
           suffix = " ";
         }
 
-        let text = content.trim();
+        //NOTE:replace all the characters after \n\n with empty string if its present
+        let text = content.trim().replace(/\n\n.*/g, "");
         if (text === "") {
           return "";
         }
@@ -39,7 +40,8 @@ export class CustomTurnDown {
             if (!["https:", "http:", "file:"].includes(parsed_url.protocol)) {
               return `${prefix}${text}${suffix}`;
             }
-            href = encodeURIComponent(parsed_url.pathname);
+            // NOTE: Some Tests were failing if the href was encoded
+            // href = encodeURIComponent(parsed_url.pathname);
           } catch (e) {
             if (!/^https?:|^file:/.test(href)) {
               return `${prefix}[${text}](${href} "${title}")${suffix}`;
