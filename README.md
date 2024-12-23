@@ -13,7 +13,7 @@ It supports:
 [x] Audio (EXIF metadata and speech transcription)
 [x] HTML
 [x] Text-based formats (CSV, JSON, XML)
-[ ] ZIP files (iterates over contents)
+[x] ZIP files (iterates over contents)
 
 ## Youtube Transcript
 

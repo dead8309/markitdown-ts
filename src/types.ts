@@ -9,15 +9,17 @@ export type ConverterResult =
   | null
   | undefined;
 
-
 export type ConverterOptions = {
-  llmModel?: LanguageModel
+  llmModel?: LanguageModel;
   llmPrompt?: string;
   file_extension?: string;
   url?: string;
   fetch?: typeof fetch;
   enableYoutubeTranscript?: boolean;
   youtubeTranscriptLanguage?: string;
+  cleanupExtracted?: boolean;
+  //
+  _parent_converters?: DocumentConverter[];
 } & MammothOptions;
 
 type MammothOptions = Parameters<typeof mammoth.convertToHtml>[1];

@@ -52,6 +52,7 @@
   "packageManager": "pnpm@9.15.1",
   "dependencies": {
     "@joplin/turndown-plugin-gfm": "^1.0.60",
+    "@types/unzipper": "^0.10.10",
     "@xmldom/xmldom": "^0.9.6",
     "jsdom": "^25.0.1",
     "mammoth": "^1.8.0",
@@ -61,14 +62,18 @@
     "xlsx": "^0.18.5"
   },
   "peerDependencies": {
+    "ai": "^4.0.22",
     "youtube-transcript": "^1.2.1",
-    "ai": "^4.0.22"
+    "unzipper": "^0.12.3"
   },
   "peerDependenciesMeta": {
     "youtube-transcript": {
       "optional": true
     },
     "ai": {
+      "optional": true
+    },
+    "unzipper": {
       "optional": true
     }
   }

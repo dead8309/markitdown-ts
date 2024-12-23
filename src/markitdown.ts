@@ -1,7 +1,7 @@
 import * as mime from "mime-types";
 import path from "path";
 import * as fs from "fs";
-import { ConverterOptions, DocumentConverter, ConverterResult} from "./types";
+import { ConverterOptions, DocumentConverter, ConverterResult } from "./types";
 import { PlainTextConverter } from "./converters/plain-text";
 import { HtmlConverter } from "./converters/html";
 import { RSSConverter } from "./converters/xml-rss-atom";
@@ -15,6 +15,7 @@ import { XlsxConverter } from "./converters/xlsx";
 import { WavConverter } from "./converters/wav";
 import { Mp3Converter } from "./converters/mp3";
 import { ImageConverter } from "./converters/image";
+import { ZipConverter } from "./converters/zip";
 
 export class MarkItDown {
   private readonly converters: Array<DocumentConverter> = [];
@@ -33,6 +34,7 @@ export class MarkItDown {
     this.register_converter(new ImageConverter());
     this.register_converter(new IpynbConverter());
     this.register_converter(new PdfConverter());
+    this.register_converter(new ZipConverter());
   }
 
   async convert(
@@ -153,7 +155,7 @@ export class MarkItDown {
       for (const converter of this.converters) {
         let res;
         try {
-          const op = { ...options, file_extension: ext };
+          const op: ConverterOptions = { ...options, file_extension: ext, _parent_converters: this.converters };
           res = await converter.convert(source, op);
         } catch (e) {
           error = e;

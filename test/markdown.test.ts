@@ -102,218 +102,250 @@ const JPG_TEST_EXIFTOOL = {
   DateTimeOriginal: "2024:03:14 22:10:00"
 };
 
+const LLM_TEST_STRINGS = ["5bda1dd6"];
+
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
-  it("should convert plain text", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test.txt`);
+   it("should convert plain text", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.txt`);
 
-    expect(result).toBeTruthy();
+     expect(result).toBeTruthy();
 
-    const textContent = result?.text_content.replace("\\", "");
-    expect(result?.title).toBeNull();
+     const textContent = result?.text_content.replace("\\", "");
+     expect(result?.title).toBeNull();
 
-    for (const testStr of PLAIN_TEST) {
-      expect(textContent).toContain(testStr);
-    }
-  });
+     for (const testStr of PLAIN_TEST) {
+       expect(textContent).toContain(testStr);
+     }
+   });
 
-  it("should convert HTML to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test_blog.html`, {
-      url: BLOG_TEST_URL
-    });
+   it("should convert HTML to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test_blog.html`, {
+       url: BLOG_TEST_URL
+     });
 
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
 
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of BLOG_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of BLOG_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
 
-  it("should convert RSS to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test_rss.xml`);
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
+   it("should convert RSS to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test_rss.xml`);
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
 
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of RSS_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of RSS_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
 
-  it("should convert Wikipedia to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test_wikipedia.html`, {
-      url: WIKIPEDIA_TEST_URL
-    });
+   it("should convert Wikipedia to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test_wikipedia.html`, {
+       url: WIKIPEDIA_TEST_URL
+     });
 
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
 
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of WIKIPEDIA_TEST_EXCLUDES) {
-      expect(textContent).not.toContain(testString);
-    }
-    for (const testString of WIKIPEDIA_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of WIKIPEDIA_TEST_EXCLUDES) {
+       expect(textContent).not.toContain(testString);
+     }
+     for (const testString of WIKIPEDIA_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
 
-  if (!isCi) {
-    it("should convert YouTube to markdown", async () => {
+   if (!isCi) {
+     it("should convert YouTube to markdown", async () => {
+       const markitdown = new MarkItDown();
+       const result = await markitdown.convert(YOUTUBE_TEST_URL, {
+         enableYoutubeTranscript: true
+       });
+
+       expect(result).not.toBeNull();
+       expect(result).not.toBeUndefined();
+
+       const textContent = result?.text_content.replace("\\", "");
+       for (const testString of YOUTUBE_TEST_STRINGS) {
+         expect(textContent).toContain(testString);
+       }
+     });
+   }
+
+   it("should convert .ipynb to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test_notebook.ipynb`);
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of IPYNB_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("should convert Bing SERP to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test_serp.html`, {
+       url: SERP_TEST_URL
+     });
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of SERP_TEST_EXCLUDES) {
+       expect(textContent).not.toContain(testString);
+     }
+
+     for (const testString of SERP_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("should convert PDF to text", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.pdf`, {
+       url: PDF_TEST_URL
+     });
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of PDF_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("should convert .docx to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.docx`);
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of DOCX_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("should convert .docx to markdown with comments", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test_with_comment.docx`, {
+       styleMap: "comment-reference => "
+     });
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of DOCX_COMMENT_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("should convert .xlsx to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.xlsx`);
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of XLSX_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("should convert .wav metadata to markdown", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.wav`);
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+     for (const testString of WAV_TEST_STRINGS) {
+       expect(textContent).toContain(testString);
+     }
+   });
+
+   it("process .jpg metadata", async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.jpg`);
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+
+     Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
+       const target = `${key}: ${value}`;
+       expect(textContent).toContain(target);
+     });
+   });
+
+   // Uncomment this test to test with openai
+   it("process .jpg metadata with ai", { timeout: 30000 }, async () => {
+     const markitdown = new MarkItDown();
+     const result = await markitdown.convert(`${__dirname}/__files/test.jpg`, {
+       llmModel: openai("gpt-4o-mini")
+     });
+
+     expect(result).not.toBeNull();
+     expect(result).not.toBeUndefined();
+
+     const textContent = result?.text_content.replace("\\", "");
+
+     Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
+       const target = `${key}: ${value}`;
+       expect(textContent).toContain(target);
+     });
+   });
+
+    it("should convert .zip file contents to markdown", async () => {
       const markitdown = new MarkItDown();
-      const result = await markitdown.convert(YOUTUBE_TEST_URL, {
-        enableYoutubeTranscript: true
-      });
+      const result = await markitdown.convert(`${__dirname}/__files/test_files.zip`);
 
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
 
       const textContent = result?.text_content.replace("\\", "");
-      for (const testString of YOUTUBE_TEST_STRINGS) {
+      for (const testString of DOCX_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
     });
-  }
 
-  it("should convert .ipynb to markdown", async () => {
+  it("should process colors, texts in images with llm", { timeout: 30000 }, async () => {
     const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test_notebook.ipynb`);
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of IPYNB_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
-
-  it("should convert Bing SERP to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test_serp.html`, {
-      url: SERP_TEST_URL
+    const result = await markitdown.convert(`${__dirname}/__files/test_llm.jpg`, {
+      llmModel: openai("gpt-4o-mini")
     });
 
     expect(result).not.toBeNull();
     expect(result).not.toBeUndefined();
 
     const textContent = result?.text_content.replace("\\", "");
-    for (const testString of SERP_TEST_EXCLUDES) {
-      expect(textContent).not.toContain(testString);
-    }
 
-    for (const testString of SERP_TEST_STRINGS) {
+    for (const testString of LLM_TEST_STRINGS) {
       expect(textContent).toContain(testString);
     }
-  });
 
-  it("should convert PDF to text", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test.pdf`, {
-      url: PDF_TEST_URL
-    });
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of PDF_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
+    for (const testString of ["red", "circle", "blue", "square"]) {
+      expect(textContent?.toLowerCase()).toContain(testString.toLowerCase());
     }
   });
-
-  it("should convert .docx to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test.docx`);
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of DOCX_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
-
-  it("should convert .docx to markdown with comments", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test_with_comment.docx`, {
-      styleMap: "comment-reference => "
-    });
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of DOCX_COMMENT_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
-
-  it("should convert .xlsx to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test.xlsx`);
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of XLSX_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
-
-  it("should convert .wav to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test.wav`);
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of WAV_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
-
-  it("test .jpg metadata processing", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(`${__dirname}/__files/test.jpg`);
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    console.log(textContent);
-
-    Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
-      const target = `${key}: ${value}`;
-      expect(textContent).toContain(target);
-    });
-  });
-
-  if (!isCi) {
-    it("test .jpg metadata processing with ai", { timeout: 30000 }, async () => {
-      const markitdown = new MarkItDown();
-      const result = await markitdown.convert(`${__dirname}/__files/test.jpg`, {
-        llmModel: openai("gpt-4o-mini")
-      });
-
-      expect(result).not.toBeNull();
-      expect(result).not.toBeUndefined();
-
-      const textContent = result?.text_content.replace("\\", "");
-      console.log(textContent);
-
-      Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
-        const target = `${key}: ${value}`;
-        expect(textContent).toContain(target);
-      });
-    });
-  }
 });
