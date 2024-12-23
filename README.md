@@ -1,35 +1,123 @@
-# markitdown
+# markitdown-ts
 
 [![CI](https://github.com/dead8309/markitdown/actions/workflows/ci.yml/badge.svg)](https://github.com/dead8309/markitdown/actions/workflows/ci.yml)
 
-MarkItDown is a utility for converting various files to Markdown (e.g., for indexing, text analysis, etc).
+`markitdown-ts` is a TypeScript library designed for converting various file formats to Markdown. This makes it suitable for indexing, text analysis, and other applications that benefit from structured text. It is a TypeScript implementation of the original `markitdown` [Python library.](https://github.com/microsoft/markitdown)
+
 It supports:
 
-[x] PDF
-[ ] PowerPoint
-[x] Word
-[x] Excel
-[x] Images (EXIF metadata and OCR)
-[x] Audio (EXIF metadata and speech transcription)
-[x] HTML
-[x] Text-based formats (CSV, JSON, XML)
-[x] ZIP files (iterates over contents)
+- [x] PDF
+- [x] PowerPoint
+- [x] Word (.docx)
+- [x] Excel (.xlsx)
+- [x] Images (EXIF metadata extraction and optional LLM-based description)
+- [x] Audio (EXIF metadata extraction and optional speech transcription)
+- [x] HTML
+- [x] Text-based formats (plain text, .csv, .xml, .rss, .atom)
+- [x] Jupyter Notebooks (.ipynb)
+- [x] Bing Search Result Pages (SERP)
+- [x] ZIP files (recursively iterates over contents)
 
-## Youtube Transcript
+## YouTube Transcript Support
 
-To enable YouTube transcript functionality, you need to install the youtube-transcript package:
+To enable YouTube transcript functionality, you need to install the `youtube-transcript` package:
 
 ```bash
 npm install youtube-transcript
 ```
 
+When converting YouTube files, you can pass the `enableYoutubeTranscript` and the `youtubeTranscriptLanguage` option to control the transcript extraction. By default it will use `"en"` if the `youtube_transcript_languages` is not provided.
+
+```typescript
+const markitdown = new MarkItDown();
+const result = await markitdown.convert("https://www.youtube.com/watch?v=V2qZ_lgxTzg", {
+  enableYoutubeTranscript: true,
+  youtubeTranscriptLanguage: "en"
+});
+```
+
+## LLM Image Description Support
+
+To enable LLM functionality, you need to configure a model and client in the `options` for the image converter. You can use the `@ai-sdk/openai` to get an LLM client.
+
+```typescript
+import { openai } from "@ai-sdk/openai";
+
+const markitdown = new MarkItDown();
+const result = await markitdown.convert("test.jpg", {
+  llmModel: openai("gpt-4o-mini"),
+  llmPrompt: "Write a detailed description of this image"
+});
+```
+
 ## Installation
 
+Install `markitdown-ts` using your preferred package manager:
+
 ```bash
-npm i markitdown
+pnpm add markitdown-ts
+```
+
+or
+
+```bash
+npm install markitdown-ts
+```
+
+or
+
+```bash
+yarn add markitdown-ts
 ```
 
 ## Usage
+
+```typescript
+import { MarkItDown } from "markitdown-ts";
+
+const markitdown = new MarkItDown();
+try {
+  const result = await markitdown.convert("path/to/your/file.pdf");
+  if (result) {
+    console.log(result.text_content);
+  }
+} catch (error) {
+  console.error("Conversion failed:", error);
+}
+```
+
+Pass additional options as needed for specific functionality.
+
+## API
+
+The library uses a single function `convert` for all conversions, with the options and the response type defined as such:
+
+```typescript
+export interface DocumentConverter {
+  convert(local_path: string, options: ConverterOptions): Promise<ConverterResult>;
+}
+
+export type ConverterResult =
+  | {
+      title: string | null;
+      text_content: string;
+    }
+  | null
+  | undefined;
+
+export type ConverterOption = {
+  file_extension?: string;
+  url?: string;
+  fetch?: typeof fetch;
+  enableYoutubeTranscript?: boolean; // false by default
+  youtubeTranscriptLanguage?: string; // "en" by default
+  llmModel: string;
+  llmPrompt?: string;
+  styleMap?: string | Array<string>;
+  _parent_converters?: DocumentConverter[];
+  cleanup_extracted?: boolean;
+};
+```
 
 ## License
 
