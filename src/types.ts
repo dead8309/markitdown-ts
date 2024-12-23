@@ -1,3 +1,5 @@
+import mammoth, { type convertToHtml } from "mammoth";
+
 export interface MarkItDownOptions {
   llm_client: any;
   llm_model: any;
@@ -17,7 +19,9 @@ export type ConverterOptions = {
   fetch?: typeof fetch;
   enableYoutubeTranscript?: boolean;
   youtubeTranscriptLanguage?: string;
-};
+} & MammothOptions;
+
+type MammothOptions = Parameters<typeof mammoth.convertToHtml>[1];
 
 export interface DocumentConverter {
   convert(local_path: string, options: ConverterOptions): Promise<ConverterResult>;

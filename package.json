@@ -41,6 +41,7 @@
     "@types/node": "^22.10.2",
     "@types/turndown": "^5.0.5",
     "bumpp": "^9.9.1",
+    "is-ci": "^4.1.0",
     "prettier": "^3.4.2",
     "typescript": "^5.7.2",
     "unbuild": "^3.0.1",
@@ -51,6 +52,7 @@
   "dependencies": {
     "@xmldom/xmldom": "^0.9.6",
     "jsdom": "^25.0.1",
+    "mammoth": "^1.8.0",
     "mime-types": "^2.1.35",
     "pdf-ts": "^0.0.2",
     "turndown": "^7.2.0"

@@ -54,6 +54,26 @@ const SERP_TEST_EXCLUDES = [
 const PDF_TEST_URL = "https://arxiv.org/pdf/2308.08155v2.pdf";
 const PDF_TEST_STRINGS = ["While there is contemporaneous exploration of multi-agent approaches"];
 
+const DOCX_TEST_STRINGS = [
+  "314b0a30-5b04-470b-b9f7-eed2c2bec74a",
+  "49e168b7-d2ae-407f-a055-2167576f39a1",
+  "## d666f1f7-46cb-42bd-9a39-9a39cf2a509f",
+  "# Abstract",
+  "# Introduction",
+  "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation"
+];
+
+const DOCX_COMMENT_TEST_STRINGS = [
+  "314b0a30-5b04-470b-b9f7-eed2c2bec74a",
+  "49e168b7-d2ae-407f-a055-2167576f39a1",
+  "## d666f1f7-46cb-42bd-9a39-9a39cf2a509f",
+  "# Abstract",
+  "# Introduction",
+  "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation",
+  "This is a test comment. 12df-321a",
+  "Yet another comment in the doc. 55yiyi-asd09"
+];
+
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
   it("should convert plain text", async () => {
@@ -173,6 +193,34 @@ describe("MarkItDown Tests", () => {
 
     const textContent = result?.text_content.replace("\\", "");
     for (const testString of PDF_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert .docx to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test.docx`);
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of DOCX_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert .docx to markdown with comments", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test_with_comment.docx`, {
+      styleMap: "comment-reference => "
+    });
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of DOCX_COMMENT_TEST_STRINGS) {
       expect(textContent).toContain(testString);
     }
   });

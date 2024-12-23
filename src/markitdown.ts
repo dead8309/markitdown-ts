@@ -10,6 +10,7 @@ import { YouTubeConverter } from "./converters/youtube";
 import { IpynbConverter } from "./converters/ipynb";
 import { BingSerpConverter } from "./converters/bingserp";
 import { PdfConverter } from "./converters/pdf";
+import { DocxConverter } from "./converters/docx";
 
 export class MarkItDown {
   private readonly llm_client: any;
@@ -29,6 +30,7 @@ export class MarkItDown {
     this.register_converter(new WikipediaConverter());
     this.register_converter(new YouTubeConverter());
     this.register_converter(new BingSerpConverter());
+    this.register_converter(new DocxConverter());
     this.register_converter(new IpynbConverter());
     this.register_converter(new PdfConverter());
   }
