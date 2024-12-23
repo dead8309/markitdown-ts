@@ -155,7 +155,11 @@ export class MarkItDown {
       for (const converter of this.converters) {
         let res;
         try {
-          const op: ConverterOptions = { ...options, file_extension: ext, _parent_converters: this.converters };
+          const op: ConverterOptions = {
+            ...options,
+            file_extension: ext,
+            _parent_converters: this.converters
+          };
           res = await converter.convert(source, op);
         } catch (e) {
           error = e;
