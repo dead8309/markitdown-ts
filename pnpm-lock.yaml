@@ -11,9 +11,6 @@ importers:
       '@joplin/turndown-plugin-gfm':
         specifier: ^1.0.60
         version: 1.0.60
-      '@types/unzipper':
-        specifier: ^0.10.10
-        version: 0.10.10
       '@xmldom/xmldom':
         specifier: ^0.9.6
         version: 0.9.6
@@ -60,6 +57,9 @@ importers:
       '@types/turndown':
         specifier: ^5.0.5
         version: 5.0.5
+      '@types/unzipper':
+        specifier: ^0.10.10
+        version: 0.10.10
       bumpp:
         specifier: ^9.9.1
         version: 9.9.1
