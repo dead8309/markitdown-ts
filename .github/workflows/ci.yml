@@ -14,6 +14,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Use Exiftool
+        uses: woss/exiftool-action@v12.87
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v4.0.0
 
