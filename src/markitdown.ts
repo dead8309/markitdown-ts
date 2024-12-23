@@ -9,6 +9,7 @@ import { WikipediaConverter } from "./converters/wikipedia";
 import { YouTubeConverter } from "./converters/youtube";
 import { IpynbConverter } from "./converters/ipynb";
 import { BingSerpConverter } from "./converters/bingserp";
+import { PdfConverter } from "./converters/pdf";
 
 export class MarkItDown {
   private readonly llm_client: any;
@@ -29,6 +30,7 @@ export class MarkItDown {
     this.register_converter(new YouTubeConverter());
     this.register_converter(new BingSerpConverter());
     this.register_converter(new IpynbConverter());
+    this.register_converter(new PdfConverter());
   }
 
   async convert(
@@ -88,7 +90,8 @@ export class MarkItDown {
     const url_ext = path.extname(new URL(response.url).pathname);
     extensions.add(url_ext);
 
-    const temp_writeable = fs.createWriteStream("/tmp/temp");
+    const file = fname ? `/tmp/${fname?.[1]}` : "/tmp/temp";
+    const temp_writeable = fs.createWriteStream(file);
 
     try {
       if (response.body == null) {
@@ -103,7 +106,7 @@ export class MarkItDown {
       }
 
       temp_writeable.end();
-      return await this._convert("/tmp/temp", extensions, {
+      return await this._convert(file, extensions, {
         ...options,
         url: response.url
       });

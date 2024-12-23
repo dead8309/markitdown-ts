@@ -51,6 +51,9 @@ const SERP_TEST_EXCLUDES = [
   "data:image/svg+xml,%3Csvg%20width%3D"
 ];
 
+const PDF_TEST_URL = "https://arxiv.org/pdf/2308.08155v2.pdf";
+const PDF_TEST_STRINGS = ["While there is contemporaneous exploration of multi-agent approaches"];
+
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
   it("should convert plain text", async () => {
@@ -155,6 +158,21 @@ describe("MarkItDown Tests", () => {
     }
 
     for (const testString of SERP_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert PDF to text", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test.pdf`, {
+      url: PDF_TEST_URL
+    });
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of PDF_TEST_STRINGS) {
       expect(textContent).toContain(testString);
     }
   });
