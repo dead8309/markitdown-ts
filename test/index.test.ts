@@ -86,8 +86,8 @@ describe("MarkItDown Tests", () => {
     });
   });
 
-  describe("Youtube Converter", () => {
-    if (!isCi) {
+  if (!isCi) {
+    describe("Youtube Converter", () => {
       it("should convert YouTube to markdown with transcript", async () => {
         const markitdown = new MarkItDown();
         const result = await markitdown.convert(YOUTUBE_TEST_URL, {
@@ -100,8 +100,9 @@ describe("MarkItDown Tests", () => {
           expect(textContent).toContain(testString);
         }
       }, 30000);
-    }
-  });
+    });
+  }
+
   describe("IPYNB Converter", () => {
     it("should convert .ipynb to markdown", async () => {
       const markitdown = new MarkItDown();
