@@ -75,6 +75,12 @@ const DOCX_COMMENT_TEST_STRINGS = [
   "Yet another comment in the doc. 55yiyi-asd09"
 ];
 
+const XLSX_TEST_STRINGS = [
+  "## 09060124-b5e7-4717-9d07-3c046eb",
+  "6ff4173b-42a5-4784-9b19-f49caff4d93d",
+  "affc7dad-52dc-4b98-9b5d-51e65d8a8ad0"
+];
+
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
   it("should convert plain text", async () => {
@@ -224,6 +230,19 @@ describe("MarkItDown Tests", () => {
 
     const textContent = result?.text_content.replace("\\", "");
     for (const testString of DOCX_COMMENT_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("should convert .xlsx to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test.xlsx`);
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of XLSX_TEST_STRINGS) {
       expect(textContent).toContain(testString);
     }
   });

@@ -50,12 +50,14 @@
   },
   "packageManager": "pnpm@9.15.1",
   "dependencies": {
+    "@joplin/turndown-plugin-gfm": "^1.0.60",
     "@xmldom/xmldom": "^0.9.6",
     "jsdom": "^25.0.1",
     "mammoth": "^1.8.0",
     "mime-types": "^2.1.35",
     "pdf-ts": "^0.0.2",
-    "turndown": "^7.2.0"
+    "turndown": "^7.2.0",
+    "xlsx": "^0.18.5"
   },
   "peerDependencies": {
     "youtube-transcript": "^1.2.1"

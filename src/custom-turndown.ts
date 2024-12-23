@@ -1,10 +1,12 @@
 import TurndownService from "turndown";
+import turndownPluginGfm from "@joplin/turndown-plugin-gfm";
 
 export class CustomTurnDown {
   convert_soup(doc: string | TurndownService.Node): string {
     let turnDownService = new TurndownService({
       headingStyle: "atx"
     });
+    turnDownService.use(turndownPluginGfm.gfm);
 
     turnDownService.addRule("anchor tags", {
       filter: ["a"],
