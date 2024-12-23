@@ -1,6 +1,7 @@
 import { MarkItDown } from "../src/markitdown";
 import { describe, it, expect, vi } from "vitest";
 import isCi from "is-ci";
+import { openai } from "@ai-sdk/openai";
 
 const PLAIN_TEST = ["hello world", "hi there", "bye bye"];
 
@@ -80,6 +81,26 @@ const XLSX_TEST_STRINGS = [
   "6ff4173b-42a5-4784-9b19-f49caff4d93d",
   "affc7dad-52dc-4b98-9b5d-51e65d8a8ad0"
 ];
+
+const PPTX_TEST_STRINGS = [
+  "2cdda5c8-e50e-4db4-b5f0-9722a649f455",
+  "04191ea8-5c73-4215-a1d3-1cfb43aaaf12",
+  "44bf7d06-5e7a-4a40-a2e1-a2e42ef28c8a",
+  "1b92870d-e3b5-4e65-8153-919f4ff45592",
+  "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation",
+  "a3f6004b-6f4f-4ea8-bee3-3741f4dc385f", // chart title
+  "2003" // chart value
+];
+
+const WAV_TEST_STRINGS = ["Duration: 0:00:51", "Audio Transcript:"];
+
+const JPG_TEST_EXIFTOOL = {
+  Author: "AutoGen Authors",
+  Title: "AutoGen: Enabling Next-Gen LLM Applications via Multi-Agent Conversation",
+  Description: "AutoGen enables diverse LLM-based applications",
+  ImageSize: "1615x1967",
+  DateTimeOriginal: "2024:03:14 22:10:00"
+};
 
 //NOTE: Dont forget to add new converters to the markitdown class converters array
 describe("MarkItDown Tests", () => {
@@ -246,4 +267,53 @@ describe("MarkItDown Tests", () => {
       expect(textContent).toContain(testString);
     }
   });
+
+  it("should convert .wav to markdown", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test.wav`);
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    for (const testString of WAV_TEST_STRINGS) {
+      expect(textContent).toContain(testString);
+    }
+  });
+
+  it("test .jpg metadata processing", async () => {
+    const markitdown = new MarkItDown();
+    const result = await markitdown.convert(`${__dirname}/__files/test.jpg`);
+
+    expect(result).not.toBeNull();
+    expect(result).not.toBeUndefined();
+
+    const textContent = result?.text_content.replace("\\", "");
+    console.log(textContent);
+
+    Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
+      const target = `${key}: ${value}`;
+      expect(textContent).toContain(target);
+    });
+  });
+
+  if (!isCi) {
+    it("test .jpg metadata processing with ai", { timeout: 30000 }, async () => {
+      const markitdown = new MarkItDown();
+      const result = await markitdown.convert(`${__dirname}/__files/test.jpg`, {
+        llmModel: openai("gpt-4o-mini")
+      });
+
+      expect(result).not.toBeNull();
+      expect(result).not.toBeUndefined();
+
+      const textContent = result?.text_content.replace("\\", "");
+      console.log(textContent);
+
+      Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
+        const target = `${key}: ${value}`;
+        expect(textContent).toContain(target);
+      });
+    });
+  }
 });

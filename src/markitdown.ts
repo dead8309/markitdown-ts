@@ -1,7 +1,7 @@
 import * as mime from "mime-types";
 import path from "path";
 import * as fs from "fs";
-import { ConverterOptions, DocumentConverter, ConverterResult, MarkItDownOptions } from "./types";
+import { ConverterOptions, DocumentConverter, ConverterResult} from "./types";
 import { PlainTextConverter } from "./converters/plain-text";
 import { HtmlConverter } from "./converters/html";
 import { RSSConverter } from "./converters/xml-rss-atom";
@@ -12,19 +12,14 @@ import { BingSerpConverter } from "./converters/bingserp";
 import { PdfConverter } from "./converters/pdf";
 import { DocxConverter } from "./converters/docx";
 import { XlsxConverter } from "./converters/xlsx";
+import { WavConverter } from "./converters/wav";
+import { Mp3Converter } from "./converters/mp3";
+import { ImageConverter } from "./converters/image";
 
 export class MarkItDown {
-  private readonly llm_client: any;
-  private readonly llm_model: any;
   private readonly converters: Array<DocumentConverter> = [];
 
-  constructor(options: Partial<MarkItDownOptions> = {}) {
-    if (options.llm_client) {
-      this.llm_client = options.llm_client;
-    }
-    if (options.llm_model) {
-      this.llm_model = options.llm_model;
-    }
+  constructor() {
     this.register_converter(new PlainTextConverter());
     this.register_converter(new HtmlConverter());
     this.register_converter(new RSSConverter());
@@ -33,6 +28,9 @@ export class MarkItDown {
     this.register_converter(new BingSerpConverter());
     this.register_converter(new DocxConverter());
     this.register_converter(new XlsxConverter());
+    this.register_converter(new WavConverter());
+    this.register_converter(new Mp3Converter());
+    this.register_converter(new ImageConverter());
     this.register_converter(new IpynbConverter());
     this.register_converter(new PdfConverter());
   }

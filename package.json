@@ -36,6 +36,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
+    "@ai-sdk/openai": "^1.0.11",
     "@types/jsdom": "^21.1.7",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^22.10.2",
@@ -60,10 +61,14 @@
     "xlsx": "^0.18.5"
   },
   "peerDependencies": {
-    "youtube-transcript": "^1.2.1"
+    "youtube-transcript": "^1.2.1",
+    "ai": "^4.0.22"
   },
   "peerDependenciesMeta": {
     "youtube-transcript": {
+      "optional": true
+    },
+    "ai": {
       "optional": true
     }
   }

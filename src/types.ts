@@ -1,9 +1,5 @@
-import mammoth, { type convertToHtml } from "mammoth";
-
-export interface MarkItDownOptions {
-  llm_client: any;
-  llm_model: any;
-}
+import { LanguageModel } from "ai";
+import mammoth from "mammoth";
 
 export type ConverterResult =
   | {
@@ -13,7 +9,10 @@ export type ConverterResult =
   | null
   | undefined;
 
+
 export type ConverterOptions = {
+  llmModel?: LanguageModel
+  llmPrompt?: string;
   file_extension?: string;
   url?: string;
   fetch?: typeof fetch;
