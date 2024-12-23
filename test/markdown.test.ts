@@ -1,5 +1,6 @@
 import { MarkItDown } from "../src/markitdown";
 import { describe, it, expect, vi } from "vitest";
+import isCi from "is-ci";
 
 const PLAIN_TEST = ["hello world", "hi there", "bye bye"];
 
@@ -135,20 +136,22 @@ describe("MarkItDown Tests", () => {
     }
   });
 
-  it("should convert YouTube to markdown", async () => {
-    const markitdown = new MarkItDown();
-    const result = await markitdown.convert(YOUTUBE_TEST_URL, {
-      enableYoutubeTranscript: true
+  if (!isCi) {
+    it("should convert YouTube to markdown", async () => {
+      const markitdown = new MarkItDown();
+      const result = await markitdown.convert(YOUTUBE_TEST_URL, {
+        enableYoutubeTranscript: true
+      });
+
+      expect(result).not.toBeNull();
+      expect(result).not.toBeUndefined();
+
+      const textContent = result?.text_content.replace("\\", "");
+      for (const testString of YOUTUBE_TEST_STRINGS) {
+        expect(textContent).toContain(testString);
+      }
     });
-
-    expect(result).not.toBeNull();
-    expect(result).not.toBeUndefined();
-
-    const textContent = result?.text_content.replace("\\", "");
-    for (const testString of YOUTUBE_TEST_STRINGS) {
-      expect(textContent).toContain(testString);
-    }
-  });
+  }
 
   it("should convert .ipynb to markdown", async () => {
     const markitdown = new MarkItDown();
