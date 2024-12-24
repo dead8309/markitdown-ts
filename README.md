@@ -11,12 +11,16 @@ It supports:
 - [x] Word (.docx)
 - [x] Excel (.xlsx)
 - [x] Images (EXIF metadata extraction and optional LLM-based description)
-- [x] Audio (EXIF metadata extraction and optional speech transcription)
+- [x] Audio (EXIF metadata extraction only)
 - [x] HTML
 - [x] Text-based formats (plain text, .csv, .xml, .rss, .atom)
 - [x] Jupyter Notebooks (.ipynb)
 - [x] Bing Search Result Pages (SERP)
 - [x] ZIP files (recursively iterates over contents)
+
+> [!NOTE]
+>
+> Speech Recognition for audio converter has not been implemented yet. I'm happy to accept contributions for this feature.
 
 ## Installation
 
@@ -46,7 +50,7 @@ Pass additional options as needed for specific functionality.
 
 ## YouTube Transcript Support
 
-When converting YouTube files, you can pass the `enableYoutubeTranscript` and the `youtubeTranscriptLanguage` option to control the transcript extraction. By default it will use `"en"` if the `youtube_transcript_languages` is not provided.
+When converting YouTube files, you can pass the `enableYoutubeTranscript` and the `youtubeTranscriptLanguage` option to control the transcript extraction. By default it will use `"en"` if the `youtubeTranscriptLanguage` is not provided.
 
 ```typescript
 const markitdown = new MarkItDown();
