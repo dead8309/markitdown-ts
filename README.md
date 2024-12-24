@@ -18,13 +18,33 @@ It supports:
 - [x] Bing Search Result Pages (SERP)
 - [x] ZIP files (recursively iterates over contents)
 
-## YouTube Transcript Support
+## Installation
 
-To enable YouTube transcript functionality, you need to install the `youtube-transcript` package:
+Install `markitdown-ts` using your preferred package manager:
 
 ```bash
-npm install youtube-transcript
+pnpm add markitdown-ts
 ```
+
+## Usage
+
+```typescript
+import { MarkItDown } from "markitdown-ts";
+
+const markitdown = new MarkItDown();
+try {
+  const result = await markitdown.convert("path/to/your/file.pdf");
+  if (result) {
+    console.log(result.text_content);
+  }
+} catch (error) {
+  console.error("Conversion failed:", error);
+}
+```
+
+Pass additional options as needed for specific functionality.
+
+## YouTube Transcript Support
 
 When converting YouTube files, you can pass the `enableYoutubeTranscript` and the `youtubeTranscriptLanguage` option to control the transcript extraction. By default it will use `"en"` if the `youtube_transcript_languages` is not provided.
 
@@ -49,44 +69,6 @@ const result = await markitdown.convert("test.jpg", {
   llmPrompt: "Write a detailed description of this image"
 });
 ```
-
-## Installation
-
-Install `markitdown-ts` using your preferred package manager:
-
-```bash
-pnpm add markitdown-ts
-```
-
-or
-
-```bash
-npm install markitdown-ts
-```
-
-or
-
-```bash
-yarn add markitdown-ts
-```
-
-## Usage
-
-```typescript
-import { MarkItDown } from "markitdown-ts";
-
-const markitdown = new MarkItDown();
-try {
-  const result = await markitdown.convert("path/to/your/file.pdf");
-  if (result) {
-    console.log(result.text_content);
-  }
-} catch (error) {
-  console.error("Conversion failed:", error);
-}
-```
-
-Pass additional options as needed for specific functionality.
 
 ## API
 
@@ -118,9 +100,10 @@ export type ConverterOption = {
   cleanup_extracted?: boolean;
 };
 ```
+
 ## Examples
 
-Check out the [examples][./examples] folder.
+Check out the [examples](./examples) folder.
 
 ## License
 
