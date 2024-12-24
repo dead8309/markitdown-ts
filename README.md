@@ -1,6 +1,6 @@
 # markitdown-ts
 
-[![CI](https://github.com/dead8309/markitdown/actions/workflows/ci.yml/badge.svg)](https://github.com/dead8309/markitdown/actions/workflows/ci.yml)
+[![CI](https://github.com/dead8309/markitdown-ts/actions/workflows/ci.yml/badge.svg)](https://github.com/dead8309/markitdown/actions/workflows/ci.yml)
 
 `markitdown-ts` is a TypeScript library designed for converting various file formats to Markdown. This makes it suitable for indexing, text analysis, and other applications that benefit from structured text. It is a TypeScript implementation of the original `markitdown` [Python library.](https://github.com/microsoft/markitdown)
 
@@ -118,6 +118,9 @@ export type ConverterOption = {
   cleanup_extracted?: boolean;
 };
 ```
+## Examples
+
+Check out the [examples][./examples] folder.
 
 ## License
 
