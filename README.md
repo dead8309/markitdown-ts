@@ -7,7 +7,6 @@
 It supports:
 
 - [x] PDF
-- [x] PowerPoint
 - [x] Word (.docx)
 - [x] Excel (.xlsx)
 - [x] Images (EXIF metadata extraction and optional LLM-based description)
@@ -17,6 +16,7 @@ It supports:
 - [x] Jupyter Notebooks (.ipynb)
 - [x] Bing Search Result Pages (SERP)
 - [x] ZIP files (recursively iterates over contents)
+- [ ] PowerPoint
 
 > [!NOTE]
 >
