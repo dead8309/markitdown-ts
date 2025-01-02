@@ -1,7 +1,7 @@
 import { ConverterOptions, ConverterResult } from "../types";
 import { HtmlConverter } from "./html";
 import * as fs from "fs";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 
 export class XlsxConverter extends HtmlConverter {
   async convert(local_path: string, options: ConverterOptions): Promise<ConverterResult> {
