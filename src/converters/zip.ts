@@ -1,7 +1,6 @@
 import { ConverterOptions, ConverterResult, DocumentConverter } from "../types";
 import * as fs from "fs/promises";
 import * as path from "path";
-import * as unzipper from "unzipper";
 
 export class ZipConverter implements DocumentConverter {
   async convert(
@@ -28,6 +27,15 @@ export class ZipConverter implements DocumentConverter {
         title: null,
         text_content: `[ERROR] Invalid zip file path: ${localPath}`
       };
+    }
+    let unzipper;
+    try {
+      unzipper = await import("unzipper").then((mod) => mod.default);
+    } catch (error) {
+      console.error(
+        "Optional dependency 'unzipper' is not installed. Run `npm install unzipper` to enable this feature."
+      );
+      return null;
     }
     try {
       await fs.mkdir(newFolder, { recursive: true });
