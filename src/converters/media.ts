@@ -5,7 +5,10 @@ import * as util from "util";
 const exec = util.promisify(childProcess.exec);
 
 export abstract class MediaConverter implements DocumentConverter {
-  abstract convert(source: string | Buffer, options: ConverterOptions): Promise<ConverterResult | null>;
+  abstract convert(
+    source: string | Buffer,
+    options: ConverterOptions
+  ): Promise<ConverterResult | null>;
 
   async _getMetadata(local_path: string): Promise<{ [key: string]: string } | null> {
     const exiftool = await this._which("exiftool");
