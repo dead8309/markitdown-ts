@@ -4,7 +4,7 @@ import { pdfToText } from "pdf-ts";
 
 export class PdfConverter implements DocumentConverter {
   async convert(
-    localPath: string,
+    source: string | Buffer,
     options: ConverterOptions = {}
   ): Promise<ConverterResult | null> {
     const fileExtension = options.file_extension || "";
@@ -13,7 +13,7 @@ export class PdfConverter implements DocumentConverter {
     }
 
     try {
-      const pdfContent = fs.readFileSync(localPath);
+      const pdfContent = typeof source === "string" ? fs.readFileSync(source) : Buffer.from(source);
       return this._convert(pdfContent);
     } catch (error) {
       console.error("PDF Parsing Error:", error);

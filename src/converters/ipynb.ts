@@ -3,7 +3,7 @@ import * as fs from "fs";
 
 export class IpynbConverter implements DocumentConverter {
   async convert(
-    localPath: string,
+    source: string | Buffer,
     options: ConverterOptions = {}
   ): Promise<ConverterResult | null> {
     const fileExtension = options.file_extension || "";
@@ -11,7 +11,11 @@ export class IpynbConverter implements DocumentConverter {
       return null;
     }
     try {
-      const notebookContent = JSON.parse(fs.readFileSync(localPath, { encoding: "utf-8" }));
+      const contentStirng =
+        typeof source === "string"
+          ? fs.readFileSync(source, { encoding: "utf-8" })
+          : source.toString("utf-8");
+      const notebookContent = JSON.parse(contentStirng);
       return this._convert(notebookContent);
     } catch (error) {
       console.error("Error converting .ipynb file:", error);

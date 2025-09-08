@@ -4,18 +4,23 @@ import * as fs from "fs";
 import * as XLSX from "xlsx";
 
 export class XlsxConverter extends HtmlConverter {
-  async convert(local_path: string, options: ConverterOptions): Promise<ConverterResult> {
+  async convert(source: string | Buffer, options: ConverterOptions): Promise<ConverterResult> {
     const extension = options.file_extension || "";
     if (![".xlsx"].includes(extension.toLowerCase())) {
       return null;
     }
 
     try {
-      let exists = fs.existsSync(local_path);
-      if (!exists) {
-        throw new Error("File does'nt exists");
+      let workbook: XLSX.WorkBook;
+      if (typeof source === "string") {
+        if (!fs.existsSync(source)) {
+          throw new Error("File does'nt exists");
+        }
+        workbook = XLSX.readFile(source);
+      } else {
+        workbook = XLSX.read(source, { type: "buffer" });
       }
-      let workbook = XLSX.readFile(local_path);
+
       let mdContent = "";
 
       for (const sheetName of workbook.SheetNames) {

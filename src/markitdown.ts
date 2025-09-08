@@ -37,6 +37,9 @@ export class MarkItDown {
     this.register_converter(new ZipConverter());
   }
 
+  /**
+   * Converts a source from a file path, URL, or Response object.
+   */
   async convert(
     source: string | Response,
     options: ConverterOptions = {}
@@ -55,6 +58,18 @@ export class MarkItDown {
       }
     }
   }
+
+  /**
+   * Converts a source from an in-memory Buffer.
+   */
+  async convertBuffer(
+    source: Buffer,
+    options: ConverterOptions & { file_extension: string }
+  ): Promise<ConverterResult> {
+    const extensions = new Set<string>([options.file_extension]);
+    return this._convert(source, extensions, options);
+  }
+
   private async convert_url(
     source: string,
     { fetch = globalThis.fetch, ...options }: ConverterOptions
@@ -91,38 +106,26 @@ export class MarkItDown {
       extensions.add(path.extname(fname[1]));
     }
 
-    const url_ext = path.extname(new URL(response.url).pathname);
-    extensions.add(url_ext);
-
-    const file = fname ? `/tmp/${fname?.[1]}` : "/tmp/temp";
-    const temp_writeable = fs.createWriteStream(file);
-
-    try {
-      if (response.body == null) {
-        throw new Error("Response body is empty");
-      }
-
-      const reader = response.body.getReader();
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        temp_writeable.write(value);
-      }
-
-      temp_writeable.end();
-      return await this._convert(file, extensions, {
-        ...options,
-        url: response.url
-      });
-    } catch (e) {
-      throw new Error(`Could not write to file: ${e}`);
-    } finally {
-      try {
-        temp_writeable.close();
-      } catch (e) {
-        throw new Error(`Could not close file: ${e}`);
-      }
+    if (response.url) {
+      const url_ext = path.extname(new URL(response.url).pathname);
+      extensions.add(url_ext);
     }
+
+    if (extensions.size === 0) {
+      throw new Error(
+        "Could not determine file type. Please provide a `file_extension` in the options."
+      );
+    }
+
+    if (response.body == null) {
+      throw new Error("Response body is empty");
+    }
+
+    const buffer = Buffer.from(await response.arrayBuffer());
+    return await this._convert(buffer, extensions, {
+      ...options,
+      url: response.url
+    });
   }
 
   private async convert_local(source: string, options: ConverterOptions): Promise<ConverterResult> {
@@ -145,7 +148,7 @@ export class MarkItDown {
   }
 
   private async _convert(
-    source: string,
+    source: string | Buffer,
     extensions: Set<string>,
     options: any = {}
   ): Promise<ConverterResult> {

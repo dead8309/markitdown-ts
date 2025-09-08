@@ -4,18 +4,24 @@ import { CustomTurnDown } from "../custom-turndown";
 import { ConverterOptions, ConverterResult, DocumentConverter } from "../types";
 
 export class HtmlConverter implements DocumentConverter {
-  async convert(local_path: string, options: ConverterOptions): Promise<ConverterResult> {
+  async convert(source: string | Buffer, options: ConverterOptions): Promise<ConverterResult> {
     const extension = options.file_extension || "";
     if (![".html", ".htm"].includes(extension.toLowerCase())) {
       return null;
     }
 
     try {
-      let exists = fs.existsSync(local_path);
-      if (!exists) {
-        throw new Error("File does'nt exists");
+      let content;
+      if (typeof source === "string") {
+        let exists = fs.existsSync(source);
+        if (!exists) {
+          throw new Error("File does'nt exists");
+        }
+        content = fs.readFileSync(source, { encoding: "utf-8" });
+      } else {
+        content = source.toString("utf-8");
       }
-      let content = fs.readFileSync(local_path, { encoding: "utf-8" });
+
       return await this._convert(content);
     } catch (e) {
       console.error(e);

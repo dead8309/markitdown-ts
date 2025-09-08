@@ -5,14 +5,17 @@ import * as fs from "fs";
 import { JSDOM } from "jsdom";
 
 export class RSSConverter implements DocumentConverter {
-  async convert(localPath: string, options: ConverterOptions = {}): Promise<ConverterResult> {
+  async convert(source: string | Buffer, options: ConverterOptions = {}): Promise<ConverterResult> {
     const fileExtension = options.file_extension || "";
     if (![".xml", ".rss", ".atom"].includes(fileExtension.toLowerCase())) {
       return null;
     }
 
     try {
-      const xmlString = fs.readFileSync(localPath, { encoding: "utf-8" });
+      const xmlString =
+        typeof source === "string"
+          ? fs.readFileSync(source, { encoding: "utf-8" })
+          : source.toString("utf-8");
       const doc = new DOMParser().parseFromString(xmlString, "text/xml");
 
       let result;

@@ -6,7 +6,7 @@ import { CustomTurnDown } from "../custom-turndown";
 
 export class BingSerpConverter implements DocumentConverter {
   async convert(
-    localPath: string,
+    source: string | Buffer,
     options: ConverterOptions = {}
   ): Promise<ConverterResult | null> {
     const fileExtension = options.file_extension || "";
@@ -19,7 +19,10 @@ export class BingSerpConverter implements DocumentConverter {
     }
 
     try {
-      const htmlContent = fs.readFileSync(localPath, { encoding: "utf-8" });
+      const htmlContent =
+        typeof source === "string"
+          ? fs.readFileSync(source, { encoding: "utf-8" })
+          : Buffer.from(source).toString("utf-8");
       return this._convert(htmlContent, url);
     } catch (error) {
       console.error("Bing SERP Parsing Error:", error);
