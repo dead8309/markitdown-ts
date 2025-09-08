@@ -1,6 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { MarkItDown } from "../src/markitdown";
 import * as path from "path";
+import * as fs from "fs";
 import isCi from "is-ci";
 import { openai } from "@ai-sdk/openai";
 import {
@@ -252,6 +253,51 @@ describe("MarkItDown Tests", () => {
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
       const textContent = result?.text_content.replace("\\", "");
+      for (const testString of DOCX_TEST_STRINGS) {
+        expect(textContent).toContain(testString);
+      }
+    });
+  });
+
+  describe("Buffer Conversion", () => {
+    it("should correctly convert a .zip file passed as a buffer", async () => {
+      const zipFilePath = path.join(__dirname, "__files/test_files.zip");
+      const buffer = fs.readFileSync(zipFilePath);
+      const markitdown = new MarkItDown();
+      const result = await markitdown.convertBuffer(buffer, {
+        file_extension: ".zip" // NOTE: this is required for buffer conversions
+      });
+
+      expect(result).not.toBeNull();
+      expect(result).not.toBeUndefined();
+      const textContent = result?.text_content.replace("\\", "");
+
+      expect(textContent).toContain("File: test.docx");
+      for (const testString of DOCX_TEST_STRINGS) {
+        expect(textContent).toContain(testString);
+      }
+    });
+  });
+
+  describe("Blob Conversion", () => {
+    it("should correctly convert a file passed as a Blob via a Response", async () => {
+      const zipFilePath = path.join(__dirname, "__files/test_files.zip");
+      const buffer = fs.readFileSync(zipFilePath);
+      const blob = new Blob([buffer]);
+
+      const response = new Response(blob, {
+        headers: {
+          "Content-Type": "application/zip"
+        }
+      });
+
+      const markitdown = new MarkItDown();
+      const result = await markitdown.convert(response);
+
+      expect(result).not.toBeNull();
+      expect(result).not.toBeUndefined();
+      const textContent = result?.text_content.replace("\\", "");
+
       for (const testString of DOCX_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
