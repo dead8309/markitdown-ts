@@ -5,7 +5,7 @@ import { ConverterOptions, ConverterResult, DocumentConverter } from "../types";
 
 export class YouTubeConverter implements DocumentConverter {
   async convert(
-    localPath: string,
+    source: string | Buffer,
     options: ConverterOptions = {}
   ): Promise<ConverterResult | null> {
     const fileExtension = options.file_extension || "";
@@ -17,7 +17,10 @@ export class YouTubeConverter implements DocumentConverter {
       return null;
     }
     try {
-      const htmlContent = fs.readFileSync(localPath, { encoding: "utf-8" });
+      const htmlContent =
+        typeof source === "string"
+          ? fs.readFileSync(source, { encoding: "utf-8" })
+          : source.toString("utf-8");
       return this._convert(htmlContent, url, options);
     } catch (error) {
       console.error("YouTube Parsing Error:", error);

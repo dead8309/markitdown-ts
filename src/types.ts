@@ -25,5 +25,5 @@ export type ConverterOptions = {
 type MammothOptions = Parameters<typeof mammoth.convertToHtml>[1];
 
 export interface DocumentConverter {
-  convert(local_path: string, options: ConverterOptions): Promise<ConverterResult>;
+  convert(source: string | Buffer, options: ConverterOptions): Promise<ConverterResult>;
 }

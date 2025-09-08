@@ -27,7 +27,6 @@ export const YOUTUBE_TEST_STRINGS = [
   "## AutoGen FULL Tutorial with Python (Step-By-Step)",
   "This is an intermediate tutorial for installing and using AutoGen locally",
   "PT15M4S",
-  "the model we&amp;#39;re going to be using today is GPT 3.5 turbo"
 ];
 
 export const IPYNB_TEST_STRINGS = [

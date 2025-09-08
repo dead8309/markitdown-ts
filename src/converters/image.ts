@@ -5,7 +5,7 @@ import { generateText } from "ai";
 
 export class ImageConverter extends MediaConverter {
   async convert(
-    localPath: string,
+    source: string | Buffer,
     options: ConverterOptions = {}
   ): Promise<ConverterResult | null> {
     const fileExtension = options.file_extension || "";
@@ -14,49 +14,62 @@ export class ImageConverter extends MediaConverter {
     }
 
     try {
-      return this._convert(localPath, options);
+      return this._convert(source, options);
     } catch (error) {
       console.error("Image Conversion Error:", error);
       return null;
     }
   }
-  private async _convert(localPath: string, options: ConverterOptions): Promise<ConverterResult> {
+  private async _convert(
+    source: string | Buffer,
+    options: ConverterOptions
+  ): Promise<ConverterResult> {
     let mdContent = "";
 
-    const metadata = await this._getMetadata(localPath);
-    if (metadata) {
-      for (const f of [
-        "ImageSize",
-        "Title",
-        "Caption",
-        "Description",
-        "Keywords",
-        "Artist",
-        "Author",
-        "DateTimeOriginal",
-        "CreateDate",
-        "GPSPosition"
-      ]) {
-        if (metadata[f]) {
-          mdContent += `${f}: ${metadata[f]}\n`;
+    if (typeof source === "string") {
+      const metadata = await this._getMetadata(source);
+      if (metadata) {
+        for (const f of [
+          "ImageSize",
+          "Title",
+          "Caption",
+          "Description",
+          "Keywords",
+          "Artist",
+          "Author",
+          "DateTimeOriginal",
+          "CreateDate",
+          "GPSPosition"
+        ]) {
+          if (metadata[f]) {
+            mdContent += `${f}: ${metadata[f]}\n`;
+          }
         }
       }
+    } else {
+      console.warn(
+        "Metadata extraction is skipped for Buffer inputs as it requires a file path for exiftool."
+      );
     }
+
     if (options.llmModel) {
-      mdContent += `\n# Description:\n${(
-        await this._getLLMDescription(localPath, options)
-      ).trim()}\n`;
+      const imageBuffer =
+        typeof source === "string" ? fs.readFileSync(source) : Buffer.from(source);
+      mdContent += `\n# Description:\n${(await this._getLLMDescription(imageBuffer, options)).trim()}\n`;
     }
     return {
       title: null,
       text_content: mdContent.trim()
     };
   }
-  private async _getLLMDescription(localPath: string, options: ConverterOptions): Promise<string> {
+  private async _getLLMDescription(
+    imageBuffer: Buffer,
+    options: ConverterOptions
+  ): Promise<string> {
     if (!options.llmPrompt || options.llmPrompt.trim() === "") {
       options.llmPrompt = "Write a detailed caption for this image.";
     }
-    const imageFile = fs.readFileSync(localPath).toString("base64");
+    const imageFileAsBase64 = imageBuffer.toString("base64");
 
     const result = await generateText({
       model: options.llmModel!,
@@ -67,7 +80,7 @@ export class ImageConverter extends MediaConverter {
             { type: "text", text: options.llmPrompt },
             {
               type: "image",
-              image: imageFile
+              image: imageFileAsBase64
             }
           ]
         }

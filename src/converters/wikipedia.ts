@@ -3,19 +3,26 @@ import { JSDOM } from "jsdom";
 import { CustomTurnDown } from "../custom-turndown";
 import { ConverterOptions, ConverterResult, DocumentConverter } from "../types";
 
+const WIKIPEDIA_REGEX = /^https?:\/\/[a-zA-Z]{2,3}\.wikipedia\.org\//;
+const BODY_SELECTOR_QUERY = "div#mw-content-text";
+const TITLE_SELECTOR_QUERY = "span.mw-page-title-main";
+
 export class WikipediaConverter implements DocumentConverter {
-  async convert(localPath: string, options: ConverterOptions = {}): Promise<ConverterResult> {
+  async convert(source: string | Buffer, options: ConverterOptions = {}): Promise<ConverterResult> {
     const fileExtension = options.file_extension || "";
     if (![".html", ".htm"].includes(fileExtension.toLowerCase())) {
       return null;
     }
     const url = options.url || "";
-    if (!/^https?:\/\/[a-zA-Z]{2,3}\.wikipedia\.org\//.test(url)) {
+    if (!WIKIPEDIA_REGEX.test(url)) {
       return null;
     }
 
     try {
-      const htmlContent = fs.readFileSync(localPath, { encoding: "utf-8" });
+      const htmlContent =
+        typeof source === "string"
+          ? fs.readFileSync(source, { encoding: "utf-8" })
+          : source.toString("utf-8");
       return this._convert(htmlContent);
     } catch (error) {
       console.error("Wikipedia Parsing Error:", error);
@@ -31,8 +38,8 @@ export class WikipediaConverter implements DocumentConverter {
       script.remove();
     });
 
-    const bodyElm = doc.querySelector("div#mw-content-text");
-    const titleElm = doc.querySelector("span.mw-page-title-main");
+    const bodyElm = doc.querySelector(BODY_SELECTOR_QUERY);
+    const titleElm = doc.querySelector(TITLE_SELECTOR_QUERY);
 
     let webpageText = "";
     let mainTitle = doc.title;
