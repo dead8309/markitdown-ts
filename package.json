@@ -1,6 +1,6 @@
 {
   "name": "markitdown-ts",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "keywords": [],
   "homepage": "https://github.com/dead8309/markitdown-ts#readme",
@@ -36,7 +36,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@ai-sdk/openai": "^1.0.11",
+    "@ai-sdk/openai": "^2.0.62",
     "@types/jsdom": "^21.1.7",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^22.10.2",
@@ -54,17 +54,17 @@
   "dependencies": {
     "@joplin/turndown-plugin-gfm": "^1.0.60",
     "@xmldom/xmldom": "^0.9.6",
+    "ai": "^5.0.87",
     "jsdom": "^25.0.1",
     "mammoth": "^1.8.0",
     "mime-types": "^2.1.35",
     "pdf-ts": "^0.0.2",
     "turndown": "^7.2.0",
-    "xlsx": "^0.18.5",
-    "ai": "^4.0.22"
+    "xlsx": "^0.18.5"
   },
   "peerDependencies": {
-    "youtube-transcript": "^1.2.1",
-    "unzipper": "^0.12.3"
+    "unzipper": "^0.12.3",
+    "youtube-transcript": "^1.2.1"
   },
   "peerDependenciesMeta": {
     "youtube-transcript": {
