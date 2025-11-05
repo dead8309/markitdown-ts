@@ -17,6 +17,7 @@ export class ZipConverter implements DocumentConverter {
     if (!parentConverters) {
       return {
         title: null,
+        markdown: `[ERROR] No converters available to process zip contents from: ${source}`,
         text_content: `[ERROR] No converters available to process zip contents from: ${source}`
       };
     }
@@ -54,7 +55,7 @@ export class ZipConverter implements DocumentConverter {
             }
             const result = await converter.convert(entryBuffer, fileOptions);
             if (result) {
-              mdResults.push(`\n## File: ${relativePath}\n\n${result.text_content}\n\n`);
+              mdResults.push(`\n## File: ${relativePath}\n\n${result.markdown}\n\n`);
               break;
             }
           }
@@ -83,19 +84,18 @@ export class ZipConverter implements DocumentConverter {
 
       mdContent += mdResults.join("");
 
-      return {
-        title: null,
-        text_content: mdContent.trim()
-      };
+      return { title: null, markdown: mdContent.trim(), text_content: mdContent.trim() };
     } catch (error: any) {
       if (error.message.includes("invalid signature")) {
         return {
           title: null,
+          markdown: `[ERROR] Invalid or corrupted zip file: ${source}`,
           text_content: `[ERROR] Invalid or corrupted zip file: ${source}`
         };
       }
       return {
         title: null,
+        markdown: `[ERROR] Failed to process zip file ${source}: ${String(error)}`,
         text_content: `[ERROR] Failed to process zip file ${source}: ${String(error)}`
       };
     }

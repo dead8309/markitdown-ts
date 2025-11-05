@@ -57,10 +57,7 @@ export class ImageConverter extends MediaConverter {
         typeof source === "string" ? fs.readFileSync(source) : Buffer.from(source);
       mdContent += `\n# Description:\n${(await this._getLLMDescription(imageBuffer, options)).trim()}\n`;
     }
-    return {
-      title: null,
-      text_content: mdContent.trim()
-    };
+    return { title: null, markdown: mdContent.trim(), text_content: mdContent.trim() };
   }
   private async _getLLMDescription(
     imageBuffer: Buffer,

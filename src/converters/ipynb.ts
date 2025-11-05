@@ -49,10 +49,7 @@ export class IpynbConverter implements DocumentConverter {
       }
       const mdText = mdOutput.join("\n\n");
       title = notebookContent.metadata?.title || title;
-      return {
-        title: title,
-        text_content: mdText
-      };
+      return { title: title, markdown: mdText, text_content: mdText };
     } catch (e) {
       console.error("Error converting .ipynb file:", e);
       throw new Error(`Error converting .ipynb file: ${e}`);

@@ -23,10 +23,7 @@ export class PdfConverter implements DocumentConverter {
   private async _convert(pdfContent: Buffer): Promise<ConverterResult> {
     try {
       const textContent = await pdfToText(pdfContent);
-      return {
-        title: null,
-        text_content: textContent
-      };
+      return { title: null, markdown: textContent, text_content: textContent };
     } catch (error) {
       console.error("PDF Parsing Error:", error);
       return null;

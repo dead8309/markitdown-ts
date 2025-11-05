@@ -62,10 +62,7 @@ export class WavConverter extends MediaConverter {
         "\n\n### Audio Transcript:\n[Audio transcription is not supported for Buffer inputs in this version.]";
     }
 
-    return {
-      title: null,
-      text_content: mdContent.trim()
-    };
+    return { title: null, markdown: mdContent.trim(), text_content: mdContent.trim() };
   }
 
   // TODO: Add speech to text

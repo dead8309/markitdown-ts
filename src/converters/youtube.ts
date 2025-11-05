@@ -131,10 +131,7 @@ export class YouTubeConverter implements DocumentConverter {
       }
     }
     const finalTitle = title ? title : doc.title;
-    return {
-      title: finalTitle,
-      text_content: webpageText
-    };
+    return { title: finalTitle, markdown: webpageText, text_content: webpageText };
   }
   private _get(
     metadata: Record<string, string>,

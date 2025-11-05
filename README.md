@@ -50,7 +50,7 @@ try {
   const result = await markitdown.convert("https://arxiv.org/pdf/2308.08155v2.pdf");
 
   if (result) {
-    console.log(result.text_content);
+    console.log(result.markdown);
   }
 } catch (error) {
   console.error("Conversion failed:", error);
@@ -158,6 +158,8 @@ class MarkItDown {
 export type ConverterResult =
   | {
       title: string | null;
+      markdown: string;
+      /** @deprecated Use `markdown` instead. */
       text_content: string;
     }
   | null

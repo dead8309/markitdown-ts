@@ -63,10 +63,7 @@ export class RSSConverter implements DocumentConverter {
           mdText += this._parseContent(entryContent);
         }
       }
-      return {
-        title: title,
-        text_content: mdText
-      };
+      return { title: title, markdown: mdText, text_content: mdText };
     } catch (error) {
       console.error("Atom Parsing Error:", error);
       return null;
@@ -110,10 +107,7 @@ export class RSSConverter implements DocumentConverter {
           mdText += this._parseContent(content);
         }
       }
-      return {
-        title: channelTitle,
-        text_content: mdText
-      };
+      return { title: channelTitle, markdown: mdText, text_content: mdText };
     } catch (error) {
       console.error("RSS Parsing Error:", error);
       return null;

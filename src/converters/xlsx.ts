@@ -26,12 +26,9 @@ export class XlsxConverter extends HtmlConverter {
       for (const sheetName of workbook.SheetNames) {
         mdContent += `## ${sheetName}\n`;
         let htmlContent = XLSX.utils.sheet_to_html(workbook.Sheets[sheetName]);
-        mdContent += (await this._convert(htmlContent))?.text_content.trim() + "\n\n";
+        mdContent += (await this._convert(htmlContent))?.markdown.trim() + "\n\n";
       }
-      return {
-        title: workbook?.Props?.Title || "Untitled",
-        text_content: mdContent
-      };
+      return { title: workbook?.Props?.Title || "Untitled", markdown: mdContent, text_content: mdContent };
     } catch (e) {
       console.error(e);
       return null;

@@ -54,9 +54,6 @@ export class WikipediaConverter implements DocumentConverter {
       webpageText = new CustomTurnDown().convert_soup(doc);
     }
 
-    return {
-      title: mainTitle,
-      text_content: webpageText
-    };
+    return { title: mainTitle, markdown: webpageText, text_content: webpageText };
   }
 }

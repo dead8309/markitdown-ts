@@ -169,8 +169,8 @@ export class MarkItDown {
         }
 
         if (res != null) {
-          res.text_content = res.text_content.replace(/(?:\r\n|\r|\n)/g, "\n").trim();
-          res.text_content = res.text_content.replace(/\n{3,}/g, "\n\n");
+          res.markdown = res.markdown.replace(/(?:\r\n|\r|\n)/g, "\n").trim();
+          res.markdown = res.markdown.replace(/\n{3,}/g, "\n\n");
 
           return res;
         }

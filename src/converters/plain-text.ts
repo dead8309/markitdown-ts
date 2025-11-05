@@ -23,6 +23,7 @@ export class PlainTextConverter implements DocumentConverter {
 
     return {
       title: null,
+      markdown: content,
       text_content: content
     };
   }

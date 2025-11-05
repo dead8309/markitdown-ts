@@ -34,7 +34,7 @@ describe("MarkItDown Tests", () => {
       const markitdown = new MarkItDown();
       const result = await markitdown.convert(path.join(__dirname, "__files/test.txt"));
       expect(result).toBeTruthy();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       expect(result?.title).toBeNull();
       for (const testStr of PLAIN_TEST) {
         expect(textContent).toContain(testStr);
@@ -49,7 +49,7 @@ describe("MarkItDown Tests", () => {
       });
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of BLOG_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -62,7 +62,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test_rss.xml"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of RSS_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -77,7 +77,7 @@ describe("MarkItDown Tests", () => {
       });
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of WIKIPEDIA_TEST_EXCLUDES) {
         expect(textContent).not.toContain(testString);
       }
@@ -96,7 +96,7 @@ describe("MarkItDown Tests", () => {
         });
         expect(result).not.toBeNull();
         expect(result).not.toBeUndefined();
-        const textContent = result?.text_content.replace("\\", "");
+        const textContent = result?.markdown.replace("\\", "");
         for (const testString of YOUTUBE_TEST_STRINGS) {
           expect(textContent).toContain(testString);
         }
@@ -110,7 +110,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test_notebook.ipynb"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of IPYNB_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -124,7 +124,7 @@ describe("MarkItDown Tests", () => {
       });
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of SERP_TEST_EXCLUDES) {
         expect(textContent).not.toContain(testString);
       }
@@ -141,7 +141,7 @@ describe("MarkItDown Tests", () => {
       });
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of PDF_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -153,7 +153,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test.docx"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of DOCX_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -166,7 +166,7 @@ describe("MarkItDown Tests", () => {
       );
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of DOCX_COMMENT_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -178,7 +178,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test.xlsx"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of XLSX_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -191,7 +191,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test.wav"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of WAV_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -204,7 +204,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test.jpg"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
         const target = `${key}: ${value}`;
         expect(textContent).toContain(target);
@@ -219,7 +219,7 @@ describe("MarkItDown Tests", () => {
         });
         expect(result).not.toBeNull();
         expect(result).not.toBeUndefined();
-        const textContent = result?.text_content.replace("\\", "");
+        const textContent = result?.markdown.replace("\\", "");
         Object.entries(JPG_TEST_EXIFTOOL).forEach(([key, value]) => {
           const target = `${key}: ${value}`;
           expect(textContent).toContain(target);
@@ -235,7 +235,7 @@ describe("MarkItDown Tests", () => {
         });
         expect(result).not.toBeNull();
         expect(result).not.toBeUndefined();
-        const textContent = result?.text_content.replace("\\", "");
+        const textContent = result?.markdown.replace("\\", "");
         for (const testString of LLM_TEST_STRINGS) {
           expect(textContent).toContain(testString);
         }
@@ -252,7 +252,7 @@ describe("MarkItDown Tests", () => {
       const result = await markitdown.convert(path.join(__dirname, "__files/test_files.zip"));
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
       for (const testString of DOCX_TEST_STRINGS) {
         expect(textContent).toContain(testString);
       }
@@ -270,7 +270,7 @@ describe("MarkItDown Tests", () => {
 
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
 
       expect(textContent).toContain("File: test.docx");
       for (const testString of DOCX_TEST_STRINGS) {
@@ -296,7 +296,7 @@ describe("MarkItDown Tests", () => {
 
       expect(result).not.toBeNull();
       expect(result).not.toBeUndefined();
-      const textContent = result?.text_content.replace("\\", "");
+      const textContent = result?.markdown.replace("\\", "");
 
       for (const testString of DOCX_TEST_STRINGS) {
         expect(textContent).toContain(testString);

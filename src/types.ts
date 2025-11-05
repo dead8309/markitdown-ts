@@ -4,6 +4,8 @@ import mammoth from "mammoth";
 export type ConverterResult =
   | {
       title: string | null;
+      markdown: string;
+      /** @deprecated Use `markdown` instead. */
       text_content: string;
     }
   | null

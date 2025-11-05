@@ -66,10 +66,7 @@ export class BingSerpConverter implements DocumentConverter {
       results.push(lines.join("\n"));
     });
     const webpageText = `## A Bing search for '${query}' found the following results:\n\n${results.join("\n\n")}`;
-    return {
-      title: doc.title,
-      text_content: webpageText
-    };
+    return { title: doc.title, markdown: webpageText, text_content: webpageText };
   }
 
   private _decodeBase64Url(encodedUrl: string): string {

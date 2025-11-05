@@ -52,6 +52,7 @@ export class HtmlConverter implements DocumentConverter {
 
     return {
       title: doc.title,
+      markdown: webpageText,
       text_content: webpageText
     };
   }

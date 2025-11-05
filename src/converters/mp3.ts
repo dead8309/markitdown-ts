@@ -70,9 +70,6 @@ export class Mp3Converter extends WavConverter {
         "\n\n### Audio Transcript:\n[Audio conversion and transcription are not supported for Buffer inputs.]";
     }
 
-    return {
-      title: null,
-      text_content: mdContent.trim()
-    };
+    return { title: null, markdown: mdContent.trim(), text_content: mdContent.trim() };
   }
 }
