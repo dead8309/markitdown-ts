@@ -5,5 +5,5 @@ import path from "path";
   const markitdown = new MarkItDown();
   const zipFile = path.normalize(`${__dirname}/../test_files.zip`);
   const result = await markitdown.convert(zipFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

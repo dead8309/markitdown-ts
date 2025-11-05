@@ -4,5 +4,5 @@ import { MarkItDown } from "markitdown-ts";
   const markitdown = new MarkItDown();
   const serpFile = "./test_serp.html";
   const result = await markitdown.convert(serpFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

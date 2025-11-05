@@ -4,5 +4,5 @@ import { MarkItDown } from "markitdown-ts";
   const markitdown = new MarkItDown();
   const imageFile = "./test.jpg";
   const result = await markitdown.convert(imageFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

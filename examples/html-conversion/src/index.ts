@@ -4,5 +4,5 @@ import { MarkItDown } from "markitdown-ts";
   const markitdown = new MarkItDown();
   const htmlFile = "./test.html";
   const result = await markitdown.convert(htmlFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

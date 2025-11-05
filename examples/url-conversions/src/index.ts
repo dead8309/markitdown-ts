@@ -11,6 +11,6 @@ import { MarkItDown } from "markitdown-ts";
   ];
   for (const url of URLS) {
     const result = await markitdown.convert(url);
-    console.log(result?.text_content);
+    console.log(result?.markdown);
   }
 })();

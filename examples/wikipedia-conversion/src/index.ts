@@ -4,5 +4,5 @@ import { MarkItDown } from "markitdown-ts";
   const markitdown = new MarkItDown();
   const wikipediaFile = "./test_wikipedia.html";
   const result = await markitdown.convert(wikipediaFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

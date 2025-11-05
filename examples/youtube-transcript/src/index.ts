@@ -6,5 +6,5 @@ import { MarkItDown } from "markitdown-ts";
     enableYoutubeTranscript: true,
     youtubeTranscriptLanguage: "en"
   });
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

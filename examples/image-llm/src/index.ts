@@ -10,5 +10,5 @@ configDotenv();
   const result = await markitdown.convert(imageFile, {
     llmModel: openai("gpt-4o-mini"),
   });
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

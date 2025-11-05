@@ -4,5 +4,5 @@ import { MarkItDown } from "markitdown-ts";
   const markitdown = new MarkItDown();
   const docxFile = "./test.docx";
   const result = await markitdown.convert(docxFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();

@@ -4,5 +4,5 @@ import { MarkItDown } from "markitdown-ts";
   const markitdown = new MarkItDown();
   const ipynbFile = "./test_notebook.ipynb";
   const result = await markitdown.convert(ipynbFile);
-  console.log(result?.text_content);
+  console.log(result?.markdown);
 })();
