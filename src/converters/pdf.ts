@@ -1,6 +1,6 @@
 import fs from "fs";
-import { DocumentConverter, ConverterOptions, ConverterResult } from "../types";
-import { pdfToText } from "pdf-ts";
+import { PDFParse } from "pdf-parse";
+import { ConverterOptions, ConverterResult, DocumentConverter } from "../types";
 
 export class PdfConverter implements DocumentConverter {
   async convert(
@@ -22,8 +22,9 @@ export class PdfConverter implements DocumentConverter {
   }
   private async _convert(pdfContent: Buffer): Promise<ConverterResult> {
     try {
-      const textContent = await pdfToText(pdfContent);
-      return { title: null, markdown: textContent, text_content: textContent };
+      const parser = new PDFParse({ data: pdfContent });
+      const result = await parser.getText();
+      return { title: null, markdown: result.text, text_content: result.text };
     } catch (error) {
       console.error("PDF Parsing Error:", error);
       return null;
