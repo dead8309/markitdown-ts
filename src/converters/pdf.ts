@@ -24,6 +24,7 @@ export class PdfConverter implements DocumentConverter {
     try {
       const parser = new PDFParse({ data: pdfContent });
       const result = await parser.getText();
+      await parser.destroy();
       return { title: null, markdown: result.text, text_content: result.text };
     } catch (error) {
       console.error("PDF Parsing Error:", error);
