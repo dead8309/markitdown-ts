@@ -36,7 +36,7 @@
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "@ai-sdk/openai": "^2.0.62",
+    "@ai-sdk/openai": "^3.0.2",
     "@types/jsdom": "^21.1.7",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^22.10.2",
@@ -55,7 +55,7 @@
   "dependencies": {
     "@joplin/turndown-plugin-gfm": "^1.0.60",
     "@xmldom/xmldom": "^0.9.6",
-    "ai": "^5.0.87",
+    "ai": "^6.0.6",
     "jsdom": "^25.0.1",
     "mammoth": "^1.8.0",
     "mime-types": "^2.1.35",
