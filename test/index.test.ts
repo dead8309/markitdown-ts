@@ -183,6 +183,19 @@ describe("MarkItDown Tests", () => {
         expect(textContent).toContain(testString);
       }
     });
+
+    it("should convert .xlsx having empty sheets to markdown", async () => {
+      const markitdown = new MarkItDown();
+      const result = await markitdown.convert(
+        path.join(__dirname, "__files/test_empty_sheets.xlsx")
+      );
+      expect(result).not.toBeNull();
+      expect(result).not.toBeUndefined();
+      const textContent = result?.markdown.replace("\\", "");
+      for (const testString of XLSX_TEST_STRINGS) {
+        expect(textContent).toContain(testString);
+      }
+    });
   });
 
   describe("WAV Converter", () => {
