@@ -24,9 +24,12 @@ export class XlsxConverter extends HtmlConverter {
       let mdContent = "";
 
       for (const sheetName of workbook.SheetNames) {
-        mdContent += `## ${sheetName}\n`;
-        let htmlContent = XLSX.utils.sheet_to_html(workbook.Sheets[sheetName]);
-        mdContent += (await this._convert(htmlContent))?.markdown.trim() + "\n\n";
+        const sheet = workbook.Sheets[sheetName];
+        if (sheet["!ref"]) {
+          mdContent += `## ${sheetName}\n`;
+          let htmlContent = XLSX.utils.sheet_to_html(sheet);
+          mdContent += (await this._convert(htmlContent))?.markdown.trim() + "\n\n";
+        }
       }
       return { title: workbook?.Props?.Title || "Untitled", markdown: mdContent, text_content: mdContent };
     } catch (e) {
